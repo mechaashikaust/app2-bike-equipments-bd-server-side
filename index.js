@@ -28,7 +28,7 @@ async function run() {
         // Equipment Collection
         const equipmentCollection = client.db('bike_equipments_bd').collection('equipment');
         // Booking Collection
-        // const bookingCollection = client.db('bike_equipments_bd').collection('bookings');
+        const bookingCollection = client.db('bike_equipments_bd').collection('bookings');
         // // Users Collection
         // const usersCollection = client.db('bike_equipments_bd').collection('users');
         // // Doctors Collection
@@ -54,7 +54,7 @@ async function run() {
             res.send(equipment);
         })
 
-
+        {/********************************* Update your Order Quantity Here! **************************************/ }
         app.put('/equipment/:id', async (req, res) => {
             const id = req.params.id;
             const updatedUser = req.body;
@@ -63,12 +63,7 @@ async function run() {
 
             const updatedDoc = {
                 $set: {
-                    // name: updatedUser.name,
-                    // price: updatedUser.price,
                     minimumOrderQuantity: updatedUser.minimumOrderQuantity,
-                    // availableQuantity: updatedUser.availableQuantity
-                    // description: updatedUser.description
-                    // img: updatedUser.img
                 }
             };
             const result = await equipmentCollection.updateOne(filter, updatedDoc, options);
@@ -76,13 +71,35 @@ async function run() {
         })
 
 
+        // {2}  Add a new specific Booking
+
+        app.post('/booking', async (req, res) => {
+            const booking = req.body;
+
+            // Let a Booking had done. I shouldn't apply a same booking again. 
+            // So, we will check that does the user booked an item before or not
+            const query = { itemName: booking.itemName }
+            const exists = await bookingCollection.findOne(query);
+            if (exists) {
+                return res.send({ success: false, booking: exists })
+            }
+
+
+            const result = await bookingCollection.insertOne(booking);
+
+            // SendGrid (mail verification)
+            // sendAppointmentEmail(booking);
+
+            return res.send({ success: true, result });
+        });
 
 
 
 
 
 
-        
+
+
 
     }
 
