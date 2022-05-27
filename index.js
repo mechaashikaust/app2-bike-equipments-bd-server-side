@@ -108,8 +108,8 @@ async function run() {
 
         // Equipment Collection
         const equipmentCollection = client.db('bike_equipments_bd').collection('equipment');
-        
-        
+
+
         //New Equipment Collection
         const newEquipmentCollection = client.db('bike_equipments_bd').collection('newEquipment');
 
@@ -341,6 +341,14 @@ async function run() {
         })
 
 
+        // Delete a Equipment
+
+        app.delete('/equipment/:id', verifyJWT, verifyAdmin, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await equipmentCollection.deleteOne(query);
+            res.send(result);
+        })
 
 
 
