@@ -479,7 +479,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Hello From Bike Equipments BD!')
+    res.send('Hello From Bikee Equipments BD!')
 })
 
 app.listen(port, () => {
