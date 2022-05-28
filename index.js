@@ -485,5 +485,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`Bike Equipments BD listening on port ${port}`)
+    console.log(`Bike Equipments BD listeningg on port ${port}`)
 })
