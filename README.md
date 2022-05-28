@@ -1,4 +1,4 @@
-# Welcome to Ashik Gym Equipments!
+# Welcome to Bike Equipments BD!
 
 Hi! I'm **Md. ASHIKUR RAHMAN**. Here I created a website which was about **Bike Equipments BD**.
 
