@@ -230,10 +230,12 @@ async function run() {
 
 
 
-
-
-
-
+        app.get('/booking', verifyJWT, async (req, res) => {
+            const query = {};
+            const cursor = bookingCollection.find(query);
+            const bookings = await cursor.toArray();
+            res.send(bookings);
+        })
 
         // {4} My Appointemnts with verifying JWT
 
