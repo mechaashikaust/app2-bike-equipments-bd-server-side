@@ -1,10 +1,10 @@
-# Welcome to Ashik Gym Equipments !
+# Welcome to Ashik Gym Equipments!
 
-Hi! I'm **Md. ASHIKUR RAHMAN**. Here I created a website which was about **Gym Equipments**.
+Hi! I'm **Md. ASHIKUR RAHMAN**. Here I created a website which was about **Bike Equipments BD**.
 
 # Website Live Link
 
-[Ashik Gym Equipments](https://assignment-11-p-hero.web.app/)
+[Bike Equipments BD](https://bike-equipments-bd.web.app/)
 
 ## Several Functionality Used
 
