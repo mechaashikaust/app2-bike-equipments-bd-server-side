@@ -125,6 +125,12 @@ async function run() {
         // // Payment Collection
         const paymentCollection = client.db('bike_equipments_bd').collection('payments');
 
+        // // Payment Collection
+        const profileCollection = client.db('bike_equipments_bd').collection('profiles');
+
+        // // Review Collection
+        const reviewCollection = client.db('bike_equipments_bd').collection('reviews');
+
 
 
         // Verifying admin for doctors         (after image uploading) 
@@ -191,6 +197,9 @@ async function run() {
 
 
 
+
+
+
         // {3} users set to the DB, can't login same email twice with 3 login methods (login, registratin, googlesignin)
 
         app.put('/user/:email', async (req, res) => {
@@ -215,6 +224,11 @@ async function run() {
             const users = await usersCollection.find().toArray();
             res.send(users);
         })
+
+
+
+
+
 
 
 
@@ -253,7 +267,7 @@ async function run() {
 
             // Let a Booking had done. I shouldn't apply a same booking again. 
             // So, we will check that does the user booked an item before or not
-            const query = { itemName: booking.itemName }
+            const query = { email: booking.email }
             const exists = await bookingCollection.findOne(query);
             if (exists) {
                 return res.send({ success: false, booking: exists })
@@ -289,6 +303,21 @@ async function run() {
             sendPaymentConfirmationEmail(booking);
             res.send(updatedBooking);
         })
+
+
+
+        // Delete Confirm Modal MyEquipments
+
+        app.delete('/booking/:id', verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await bookingCollection.deleteOne(query);
+            res.send(result);
+        })
+
+
+
+
 
 
 
@@ -350,17 +379,84 @@ async function run() {
             res.send(result);
         })
 
-        // Delete Confirm Modal MyEquipments
 
-        app.delete('/booking/:id', verifyJWT, verifyAdmin, async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await bookingCollection.deleteOne(query);
+
+
+        // Input Profile 
+
+        app.get('/profile', verifyJWT, async (req, res) => {
+
+
+            const egmail = req.query.email;
+            const decodedEmail = req.decoded.email;
+            if (egmail === decodedEmail) {
+                const query = { email: egmail };
+                const profile = await profileCollection.find(query).toArray();
+                return res.send(profile);
+            }
+            else {
+                return res.status(403).send({ message: 'Forbidden Access' });
+            }
+
+            // const profile = await profileCollection.find().toArray();
+            // res.send(profile);
+        })
+
+        app.post('/profile', async (req, res) => {
+            const profile = req.body;
+            const result = await profileCollection.insertOne(profile);
             res.send(result);
         })
 
 
 
+
+
+        // app.post('/profile', async (req, res) => {
+
+        //     const email = req.params.email;
+        //     const profile = req.body;
+        //     const filter = { email: email };
+        //     const options = { upsert: true };
+        //     const updateDoc = {
+        //         $set: profile,
+        //     };
+        //     const result = await usersCollection.updateOne(filter, updateDoc, options);
+        //     res.send(result);
+
+
+        // })
+
+
+
+
+
+        // Update User
+
+        app.put('/profile/:id',verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const profile = req.body;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true };
+
+            const updatedDoc = {
+                $set: profile
+            };
+            const result = await profileCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
+
+
+
+
+        // Reviews
+
+
+        app.post('/review', verifyJWT, async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            res.send(result);
+        })
 
 
 
